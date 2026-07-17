@@ -1,0 +1,15 @@
+model User {
+  id             String          @id @default(uuid())
+  email          String          @unique
+  password       String
+  name           String
+  role           Role            @default(TENANT)
+  isBanned       Boolean         @default(false)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  properties     Property[]      // ল্যান্ডলর্ড হিসেবে যুক্ত প্রপার্টিগুলো
+  rentalRequests RentalRequest[] // টেন্যান্ট হিসেবে করা রেন্টাল রিকোয়েস্টগুলো
+  reviews        Review[]        // টেন্যান্ট হিসেবে দেওয়া রিভিউগুলো
+
+  @@map("users")
+} 

@@ -7,7 +7,7 @@ import "dotenv/config";
 const PORT   = config.port
 async function main() {
     try {
-        // await prisma.$connect();
+         await prisma.$connect();
         console.log("Connected to the database successfully");
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
@@ -16,7 +16,7 @@ async function main() {
         
     }catch (error) {
         console.log("Error while starting the server:",error);
-        // await prisma.$disconnect(); // Disconnect from the database if there is an error
+         await prisma.$disconnect(); // Disconnect from the database if there is an error
         process.exit(1); 
         
     }

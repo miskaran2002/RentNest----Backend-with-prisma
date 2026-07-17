@@ -1,0 +1,15 @@
+model Review {
+  id              String         @id @default(uuid())
+  tenantId        String
+  tenant          User           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  propertyId      String
+  property        Property       @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  rentalRequestId String?
+  rentalRequest   RentalRequest? @relation(fields: [rentalRequestId], references: [id], onDelete: SetNull)
+  rating          Int            // ১ থেকে ৫ রেটিং স্টারের জন্য
+  comment         String
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@map("reviews")
+}

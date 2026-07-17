@@ -1,0 +1,20 @@
+model Property {
+  id             String          @id @default(uuid())
+  title          String
+  description    String
+  location       String
+  price          Float
+  status         PropertyStatus  @default(AVAILABLE) // enums.prisma থেকে নেওয়া
+  images         String[]        @default([])
+  amenities      String[]        @default([])
+  categoryId     String
+  category       Category        @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  landlordId     String
+  landlord       User            @relation(fields: [landlordId], references: [id], onDelete: Cascade)
+  rentalRequests RentalRequest[]
+  reviews        Review[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@map("properties")
+}
