@@ -4,6 +4,7 @@ import cors from "cors";
 import config from "./config";
 import { AuthRoutes } from "./modules/auth/auth.routes";
 import { globalErrorHandler, notFound } from "./mddlewires/globalHandler";
+import { UserRoutes } from "./modules/user/user.route";
 
 const app:Application= express();
 
@@ -25,6 +26,7 @@ app.get("/",async(req:Request,res:Response)=>{
 });
 
 app.use("/api/auth",AuthRoutes);
+app.use("/api/users",UserRoutes);
 app.use(notFound);
 app.use(globalErrorHandler);
 
