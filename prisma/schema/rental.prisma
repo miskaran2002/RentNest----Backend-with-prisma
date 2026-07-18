@@ -6,7 +6,7 @@ model RentalRequest {
   property   Property     @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   startDate  DateTime
   endDate    DateTime
-  status     RentalStatus @default(PENDING) // enums.prisma থেকে নেওয়া
+  status     RentalStatus @default(PENDING) 
   payments   Payment[]
   reviews    Review[]
   createdAt  DateTime     @default(now())

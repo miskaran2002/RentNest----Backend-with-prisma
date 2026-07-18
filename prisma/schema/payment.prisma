@@ -4,8 +4,8 @@ model Payment {
   rentalRequestId String
   rentalRequest   RentalRequest   @relation(fields: [rentalRequestId], references: [id], onDelete: Cascade)
   amount          Float
-  provider        PaymentProvider // STRIPE বা SSLCOMMERZ (enums.prisma থেকে নেওয়া)
-  status          PaymentStatus   @default(PENDING) // enums.prisma থেকে নেওয়া
+  provider        PaymentProvider // STRIPE or SSLCOMMERZ 
+  status          PaymentStatus   @default(PENDING) // enums.prisma 
   paidAt          DateTime?
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt

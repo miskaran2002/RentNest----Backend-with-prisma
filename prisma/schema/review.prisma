@@ -6,7 +6,7 @@ model Review {
   property        Property       @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   rentalRequestId String?
   rentalRequest   RentalRequest? @relation(fields: [rentalRequestId], references: [id], onDelete: SetNull)
-  rating          Int            // ১ থেকে ৫ রেটিং স্টারের জন্য
+  rating          Int          
   comment         String
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt

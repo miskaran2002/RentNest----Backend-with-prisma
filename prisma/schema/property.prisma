@@ -4,7 +4,7 @@ model Property {
   description    String
   location       String
   price          Float
-  status         PropertyStatus  @default(AVAILABLE) // enums.prisma থেকে নেওয়া
+  status         PropertyStatus  @default(AVAILABLE)
   images         String[]        @default([])
   amenities      String[]        @default([])
   categoryId     String
