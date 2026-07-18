@@ -5,6 +5,7 @@ import config from "./config";
 import { AuthRoutes } from "./modules/auth/auth.routes";
 import { globalErrorHandler, notFound } from "./mddlewires/globalHandler";
 import { UserRoutes } from "./modules/user/user.route";
+import { CategoryRoutes } from "./modules/category/category.routes";
 
 const app:Application= express();
 
@@ -27,6 +28,7 @@ app.get("/",async(req:Request,res:Response)=>{
 
 app.use("/api/auth",AuthRoutes);
 app.use("/api/users",UserRoutes);
+app.use("/api/categories",CategoryRoutes);
 app.use(notFound);
 app.use(globalErrorHandler);
 
