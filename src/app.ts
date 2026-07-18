@@ -2,7 +2,8 @@ import cookieParser from "cookie-parser";
 import express,{ Application, Request, Response } from "express";
 import cors from "cors";
 import config from "./config";
-import { prisma } from "./lib/prisma";
+import { AuthRoutes } from "./modules/auth/auth.routes";
+import { globalErrorHandler, notFound } from "./mddlewires/globalHandler";
 
 const app:Application= express();
 
@@ -22,5 +23,9 @@ app.get("/",async(req:Request,res:Response)=>{
     res.send("welcome to the Prisma-rent-nest app");
     
 });
+
+app.use("/api/auth",AuthRoutes);
+app.use(notFound);
+app.use(globalErrorHandler);
 
 export default app;
