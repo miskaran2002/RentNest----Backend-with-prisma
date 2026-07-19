@@ -110,7 +110,7 @@ const handleWebhookInDB = async (signature: string, payload: Buffer) => {
     event = stripe.webhooks.constructEvent(
       payload,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET || ''
+      config.stripe_webhook_secret || ''
     );
   } catch (err: any) {
     console.log("❌ STRIPE WEBHOOK ERROR:", err.message); 
