@@ -11,6 +11,7 @@ import { RentalRoutes } from "./modules/rental/rental.route";
 import { PaymentRoutes } from "./modules/payment/paymemt.route";
 import { PaymentController } from "./modules/payment/payment.controller";
 import { ReviewRoutes } from "./modules/review/review.routes";
+import { AdminRoutes } from "./modules/admin/admin.routes";
 
 const app:Application= express();
 
@@ -48,6 +49,7 @@ app.use("/api/properties", PropertyRoutes);
 app.use("/api/rentals", RentalRoutes);
 app.use('/api/payments', PaymentRoutes);
 app.use("/api/reviews", ReviewRoutes);
+app.use("/api/admin", AdminRoutes);
 app.use(notFound);
 app.use(globalErrorHandler);
 
