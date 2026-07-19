@@ -22,7 +22,7 @@ router.get(
 router.get(
   '/overview',
   auth('ADMIN'),
-//   AdminController.getPlatformOverview
+AdminController.getPlatformOverview
 );
 
 export const AdminRoutes = router;
