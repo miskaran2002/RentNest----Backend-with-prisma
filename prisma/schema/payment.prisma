@@ -1,7 +1,7 @@
 model Payment {
   id              String          @id @default(uuid())
   transactionId   String          @unique
-  rentalRequestId String
+  rentalRequestId String           @unique   
   rentalRequest   RentalRequest   @relation(fields: [rentalRequestId], references: [id], onDelete: Cascade)
   amount          Float
   provider        PaymentProvider // STRIPE or SSLCOMMERZ 
