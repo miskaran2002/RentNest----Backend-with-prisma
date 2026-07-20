@@ -34,6 +34,8 @@ export const globalErrorHandler = (
       message = "The requested record was not found";
     } else {
       message = "Database request error";
+      console.error("REAL ERROR:", error);
+
     }
     errorDetails = process.env.NODE_ENV === "development" ? error.message : null;
   } else if (error instanceof Error) {
