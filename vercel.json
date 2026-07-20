@@ -1,8 +1,7 @@
 {
-  "version": 2,
-  "builds": [
-    { "src": "api/index.ts", "use": "@vercel/node" }
-  ],
+  "framework": null,
+  "buildCommand": null,
+  "outputDirectory": ".",
   "rewrites": [
     { "source": "/(.*)", "destination": "/api/index" }
   ]
