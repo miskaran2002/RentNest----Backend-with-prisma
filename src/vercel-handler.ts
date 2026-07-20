@@ -1,5 +1,5 @@
-import app from "../src/app";
-import { prisma } from "../src/lib/prisma";
+import app from "./app";
+import { prisma } from "./lib/prisma";
 
 let isConnected = false;
 
