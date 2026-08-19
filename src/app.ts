@@ -25,12 +25,26 @@ app.post(
 
 
 
-// Standard Parsers & Middlewares
-app.use(cors({
-    origin:config.app_url,
-    credentials:true
-    
-}))
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://rent-nest-fronted.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Not allowed by CORS: ${origin}`));
+      }
+    },
+    credentials: true,
+  })
+);
+
+
+
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser())
