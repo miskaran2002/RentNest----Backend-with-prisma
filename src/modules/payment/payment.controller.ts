@@ -3,10 +3,26 @@ import { PaymentService } from './payment.service';
 import catchAsync from '../../utilities/catchAsync';
 import sendResponse from '../../utilities/sendResponse';
 
+// এই list টা app.ts এর CORS allowedOrigins এর সাথে সবসময় মিলিয়ে রাখবে
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://rent-nest-fronted.vercel.app',
+];
+
 const createPaymentSession = catchAsync(async (req: Request & { user?: any }, res: Response) => {
   const tenantId = req.user.userId;
   const { rentalRequestId } = req.body;
-  const result = await PaymentService.createCheckoutSession(tenantId, rentalRequestId);
+
+  const requestOrigin = req.headers.origin;
+  const clientOrigin = allowedOrigins.includes(requestOrigin as string)
+    ? (requestOrigin as string)
+    : 'https://rent-nest-fronted.vercel.app'; // safe fallback (e.g. Postman testing)
+
+  const result = await PaymentService.createCheckoutSession(
+    tenantId,
+    rentalRequestId,
+    clientOrigin
+  );
 
   sendResponse(res, {
     statusCode: 201,

@@ -5,8 +5,12 @@ import config from '../../config';
 import Stripe from 'stripe';
 import AppError from '../../utilities/AppError';
 
-const createCheckoutSession = async (tenantId: string, rentalRequestId: string) => {
-  // ১. রেন্টাল রিকোয়েস্ট খুঁজে বের করা
+const createCheckoutSession = async (
+  tenantId: string,
+  rentalRequestId: string,
+  clientOrigin: string
+) => {
+  // ১. রেন্টাল রিকোয়েস্ট খুঁজে বের করা
   const rentalRequest = await prisma.rentalRequest.findUnique({
     where: { id: rentalRequestId },
     include: { property: true },
@@ -16,17 +20,17 @@ const createCheckoutSession = async (tenantId: string, rentalRequestId: string) 
     throw new AppError(404, 'Rental request not found');
   }
 
-  // ২. সিকিউরিটি চেক: শুধু নিজের রিকোয়েস্টে পে করা যাবে
+  // ২. সিকিউরিটি চেক: শুধু নিজের রিকোয়েস্টে পে করা যাবে
   if (rentalRequest.tenantId !== tenantId) {
     throw new AppError(403, 'Forbidden. You do not own this rental request');
   }
 
-  // ৩. স্ট্যাটাস চেক: রিকোয়েস্টটি অবশ্যই APPROVED হতে হবে
+  // ৩. স্ট্যাটাস চেক: রিকোয়েস্টটি অবশ্যই APPROVED হতে হবে
   if (rentalRequest.status !== 'APPROVED') {
     throw new AppError(400, 'Payment can only be initiated for APPROVED rental requests');
   }
 
-  // ৪. ডুপ্লিকেট সফল পেমেন্ট চেক (আগে পরিশোধ করা হয়েছে কিনা)
+  // ৪. ডুপ্লিকেট সফল পেমেন্ট চেক (আগে পরিশোধ করা হয়েছে কিনা)
   const existingCompletedPayment = await prisma.payment.findFirst({
     where: {
       rentalRequestId,
@@ -58,17 +62,17 @@ const createCheckoutSession = async (tenantId: string, rentalRequestId: string) 
         quantity: 1,
       },
     ],
-    success_url: `http://localhost:3000/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `http://localhost:3000/payment/cancel`,
+    success_url: `${clientOrigin}/tenant-dashboard/my-payments?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${clientOrigin}/tenant-dashboard/my-payments?canceled=true`,
     metadata: {
       rentalRequestId,
       tenantId,
     },
   });
 
-  // ৬. ⚠️ ডুপ্লিকেট এরর এড়াতে চেকআউট হ্যান্ডলার আপডেট:
-  // যদি আগে থেকেই একটি PENDING পেমেন্ট রো থাকে, তবে নতুন সেশন আইডি দিয়ে সেটি আপডেট করুন।
-  // অন্যথায় নতুন একটি রো তৈরি করুন।
+  // ৬. ⚠️ ডুপ্লিকেট এরর এড়াতে চেকআউট হ্যান্ডলার আপডেট:
+  // যদি আগে থেকেই একটি PENDING পেমেন্ট রো থাকে, তবে নতুন সেশন আইডি দিয়ে সেটি আপডেট করুন।
+  // অন্যথায় নতুন একটি রো তৈরি করুন।
   const existingPendingPayment = await prisma.payment.findFirst({
     where: {
       rentalRequestId,
@@ -113,7 +117,7 @@ const handleWebhookInDB = async (signature: string, payload: Buffer) => {
       config.stripe_webhook_secret || ''
     );
   } catch (err: any) {
-    console.log("❌ STRIPE WEBHOOK ERROR:", err.message); 
+    console.log("❌ STRIPE WEBHOOK ERROR:", err.message);
     throw new AppError(400, `Webhook Signature Verification Failed: ${err.message}`);
   }
 
@@ -161,7 +165,7 @@ const handleWebhookInDB = async (signature: string, payload: Buffer) => {
   return { received: true };
 };
 
-// ৮. ইউজার রোল অনুযায়ী পেমেন্ট হিস্ট্রি রিটার্ন করা
+// ৮. ইউজার রোল অনুযায়ী পেমেন্ট হিস্ট্রি রিটার্ন করা
 const getMyPaymentsFromDB = async (userId: string, role: string) => {
   let whereConditions = {};
 
