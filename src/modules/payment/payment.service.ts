@@ -62,8 +62,8 @@ const createCheckoutSession = async (
         quantity: 1,
       },
     ],
-    success_url: `${clientOrigin}/tenant-dashboard/my-payments?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${clientOrigin}/tenant-dashboard/my-payments?canceled=true`,
+    success_url: `${clientOrigin}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${clientOrigin}/payment/cancel`,
     metadata: {
       rentalRequestId,
       tenantId,
